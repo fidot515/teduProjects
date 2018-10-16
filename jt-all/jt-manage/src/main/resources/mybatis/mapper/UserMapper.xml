@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!--配置时需要和业务接口保持一致  -->
+<mapper namespace="com.jt.manage.mapper.UserMapper">
+	
+	<!--配置文件和注解的形式 二者取其一  -->
+	<select id="findAll" resultType="User">
+		select * from user
+	</select>
+	
+	
+</mapper>

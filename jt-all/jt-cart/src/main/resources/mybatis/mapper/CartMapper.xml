@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!--配置时需要和业务接口保持一致  -->
+<mapper namespace="com.jt.cart.mapper.CartMapper">
+	
+	<select id="findCartByUI" resultType="Cart">
+		select * from tb_cart where user_id = #{userId} and item_id = #{itemId}
+	</select>
+	
+	<!--修改购物车数量  -->
+	<update id="updateCartNum">
+		update tb_cart set num = #{num}, updated = #{updated} where
+		item_id = #{itemId} and user_id = #{userId}
+	</update>
+</mapper>

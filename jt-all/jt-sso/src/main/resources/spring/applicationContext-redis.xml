@@ -1,0 +1,57 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" 
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd">
+	
+	<!--1.定义poolConfigBean  -->
+	<!-- <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
+		<property name="maxTotal" value="${redis.maxTotal}"/>
+		<property name="maxIdle"  value="${redis.maxIdle}"/>
+		<property name="testOnBorrow" value="${redis.testOnBorrow}"/>
+	</bean>
+	
+	定义哨兵连接池对象 
+	<bean id="jedisSentinelPool" class="redis.clients.jedis.JedisSentinelPool">
+		<constructor-arg name="masterName" value="${redis.sentinel.master}"/>
+		<constructor-arg name="sentinels">
+			<set>
+				<value>${redis.sentinel}</value>
+			</set>
+		</constructor-arg>
+		<constructor-arg name="poolConfig" ref="poolConfig"/>
+	</bean> -->
+	
+	<!--配置redis集群  -->
+	 <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig" >  
+        <!--最大空闲数-->  
+        <property name="maxIdle" value="${redis.maxIdle}" />  
+        <!--最大建立连接等待时间-->  
+        <property name="maxWaitMillis" value="${redis.maxWait}" />  
+        <!--是否在从池中取出连接前进行检验,如果检验失败,则从池中去除连接并尝试取出另一个-->  
+        <property name="testOnBorrow" value="${redis.testOnBorrow}" />  
+        <property name="maxTotal" value="${redis.maxTotal}" />  
+        <property name="minIdle" value="${redis.minIdle}" />  
+    </bean>
+    
+     <!--通过工厂模式获取数据  -->
+    <bean id="jedisCluster" class="com.jt.common.facotry.JedisClusterFactory">
+    	<!--引入配置文件源文件  -->
+    	<property name="propertySource">
+    		<value>classpath:/property/redis.properties</value>
+    	</property>
+    	<!--引入池配置文件  -->
+    	<property name="poolConfig" ref="poolConfig"/>
+    	<!--添加配置前缀-->
+    	<property name="redisNodePrefix" value="redis.cluster"/>
+    </bean>
+</beans>

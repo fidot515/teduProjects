@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <!--配置时需要和业务接口保持一致  -->
+<mapper namespace="com.jt.manage.mapper.ItemMapper">
+	
+	<!--查询商品记录总数  -->
+	<select id="findCount" resultType="int">
+		select count(*) from tb_item
+	</select>
+	
+	
+	<!--根据分页实现商品信息查询  
+		 ctrl + shift + y 小写   
+		 ctrl + shift + x 大写   
+		 因为在Linux中严格区分大小写,所以要严格表名
+		
+		#号和$符区别
+		#号有预编译的效果,会为参数添加一对""号,能用#号绝不用$
+		$只有以字段名称为参数时使用$
+		SELECT * FROM tb_item WHERE "cid" > 200  查询没有结果
+		
+	-->
+	<select id="findItemByPage" resultType="Item">
+		select * from tb_item order by created desc limit ${start},#{rows}
+	</select>
+	
+	
+	<!--更新商品状态  
+		collection中参数分析 
+		collection="ids"
+		1.如果参数是数组            array  作业:自己完成批量删除
+		2.如果参数是List集合    list   
+		3.如果参数是Map       map中的key
+	-->
+	<update id="updateStatus">
+		update tb_item set status = #{status}, updated = now() 
+		where id in (
+		<foreach collection="ids" item="id" separator=",">
+			#{id}
+		</foreach>
+		)
+	</update>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+</mapper>
